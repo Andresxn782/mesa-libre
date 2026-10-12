@@ -20,7 +20,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div>
             <x-input-label for="fecha" value="Fecha" />
-            {{-- Al crear desde el listado, propone la fecha que se estaba viendo --}}
+            {{-- Al crear desde el listado o el plano, propone la fecha que llega en la URL --}}
             <x-text-input id="fecha" name="fecha" type="date" class="mt-1 block w-full"
                 :value="old('fecha', $reserva?->fecha?->toDateString() ?? request('fecha', today()->toDateString()))" required />
             <x-input-error :messages="$errors->get('fecha')" class="mt-2" />
@@ -28,9 +28,10 @@
 
         <div>
             <x-input-label for="hora" value="Hora" />
-            {{-- MySQL guarda "20:00:00"; el input necesita "20:00" --}}
+            {{-- MySQL guarda "20:00:00"; el input necesita "20:00".
+                 Al crear desde el plano, la hora llega en la URL (?hora=...) --}}
             <x-text-input id="hora" name="hora" type="time" class="mt-1 block w-full"
-                :value="old('hora', $reserva ? substr($reserva->hora, 0, 5) : '')" required />
+                :value="old('hora', $reserva ? substr($reserva->hora, 0, 5) : request('hora'))" required />
             <x-input-error :messages="$errors->get('hora')" class="mt-2" />
         </div>
 
@@ -48,7 +49,8 @@
             class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
             <option value="">Elige una mesa</option>
             @foreach ($mesas as $mesa)
-                <option value="{{ $mesa->id }}" @selected(old('mesa_id', $reserva?->mesa_id) == $mesa->id)>
+                {{-- Al crear desde el plano, la mesa llega en la URL (?mesa_id=...) --}}
+                <option value="{{ $mesa->id }}" @selected(old('mesa_id', $reserva?->mesa_id ?? request('mesa_id')) == $mesa->id)>
                     Mesa {{ $mesa->numero }} ({{ $mesa->capacidad }} personas)
                 </option>
             @endforeach
