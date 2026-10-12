@@ -11,15 +11,17 @@ class DatabaseSeeder extends Seeder
     use WithoutModelEvents;
 
     /**
-     * Seed the application's database.
+     * Rellena la base de datos con datos de prueba.
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
+        // Esto ya venía en el archivo: crea un usuario de prueba
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
+
+        // Esto es lo nuevo: ejecuta el seeder que crea las mesas
+        $this->call(MesaSeeder::class);
     }
 }
