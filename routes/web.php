@@ -5,9 +5,9 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReservaController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// La página de inicio lleva al login. Si ya has iniciado sesión,
+// Breeze te redirige automáticamente a las reservas.
+Route::get('/', fn () => redirect()->route('login'));
 
 Route::get('/dashboard', function () {
         return redirect()->route('reservas.index');
